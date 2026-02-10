@@ -15,22 +15,23 @@ class Expenses extends StatefulWidget {
 
 class _ExpensesState extends State<Expenses> {
   final List<Expense> _registerExpenses = [
-    // Expense(
-    //   title: 'New Shoes',
-    //   amount: 69.99,
-    //   date: DateTime.now(),
-    //   category: Category.leisure,
-    // ),
-    // Expense(
-    //   title: 'Weekly Groceries',
-    //   amount: 16.53,
-    //   date: DateTime.now(),
-    //   category: Category.food,
-    // ),
+    Expense(
+      title: 'New Shoes',
+      amount: 69.99,
+      date: DateTime.now(),
+      category: Category.leisure,
+    ),
+    Expense(
+      title: 'Weekly Groceries',
+      amount: 16.53,
+      date: DateTime.now(),
+      category: Category.food,
+    ),
   ];
 
   void _openAddExpense() {
     showModalBottomSheet(
+        useSafeArea: true,
         isScrollControlled: true,
         context: context,
         builder: (ctx) => NewExpese(
@@ -67,6 +68,8 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     Widget mainContent = const Center(
       child: Text('No expenses added yet,Start adding some!'),
     );
@@ -85,14 +88,23 @@ class _ExpensesState extends State<Expenses> {
         ],
         title: const Text('Expense Tracker'),
       ),
-      body: Column(
-        children: [
-          Chart(expenses: _registerExpenses) ,
-          Expanded(
-            child: mainContent,
-          )
-        ],
-      ),
+      body: width < 600
+          ? Column(
+              children: [
+                Chart(expenses: _registerExpenses),
+                Expanded(
+                  child: mainContent,
+                )
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(child: Chart(expenses: _registerExpenses)),
+                Expanded(
+                  child: mainContent,
+                )
+              ],
+            ),
     );
   }
 }
